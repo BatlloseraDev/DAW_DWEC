@@ -86,4 +86,88 @@ function obtenerDivisores(numero){
 
 
 
+//Ejercicio PUM
 
+function devolverPUM(){
+    const numero= 100;
+    const resultado = obtenerPUM(numero);
+    document.getElementById("resultadoPUM").innerHTML = resultado;
+}
+
+function obtenerPUM(numero){
+    let cadena = [];
+    for(let i =1; i<=numero; i++){
+        let temporal = String(i).split('');
+        if(temporal[temporal.length-1]==7 || i % 7 == 0) cadena.push('PUM<br>');
+        else cadena.push(i);
+    
+    }
+    return cadena;
+}
+
+
+//Ejercicio Salario
+
+function devolverSalario(){
+    let horas= document.getElementById("horasInput").value;
+    let turno= document.getElementById("turnoInput").value;
+
+    let resSalNetRaw = document.getElementById("resultadoSalarioNeto").textContent;
+    let resSalNet = resSalNetRaw ? resSalNetRaw.split(",").map(Number) : [];
+
+    let resSalTotRaw = document.getElementById("resultadoSalarioTotal").textContent;
+    let resSalTot = resSalTotRaw ? Number(resSalTotRaw) : 0;
+
+    if(!comprobarErrores(turno)){
+        const resultado =  calcularSalario(horas,turno,resSalNet,Number(resSalTot));
+        document.getElementById("resultadoSalarioNeto").innerHTML = resultado[0];
+        document.getElementById("resultadoSalarioTotal").innerHTML = resultado[1];
+    }
+    else{
+        alert('Alguno de los datos era erroneo o incorrecto, no se añadió');
+    }
+
+}
+
+
+comprobarErrores = (texto) => (
+    texto.length>1 ||
+    !['m','t','n'].includes(texto.charAt(0))
+);
+
+function calcularSalario(horas,turno,resSalNet,resSalTot){
+
+    let cadenaSalarios= resSalNet;
+    let salarioTotal = resSalTot;
+    let resultado = [];
+    
+    let salarioTemporal=0;
+    
+    switch(turno){
+        case 'm':salarioTemporal = horas*15;break;
+        case 't':salarioTemporal = horas*17;break;
+        case 'n':salarioTemporal = horas*20;break;
+        default:console.log('Hubo un error en el switch');break;
+    }
+
+    if(salarioTemporal<600){
+        salarioTemporal-= salarioTemporal*0.08;
+    }else if(salarioTemporal>=600 && salarioTemporal<=1000){
+        salarioTemporal-= salarioTemporal*0.10;
+    }else if(salarioTemporal>1000){
+        salarioTemporal-= salarioTemporal*0.12;
+    }
+
+    cadenaSalarios.push(salarioTemporal);
+    salarioTotal+=salarioTemporal;
+
+    resultado.push(cadenaSalarios);
+    resultado.push(salarioTotal);
+
+    return resultado;
+}
+
+/*
+function montarCadenaExistentes(cadena){
+
+}*/
